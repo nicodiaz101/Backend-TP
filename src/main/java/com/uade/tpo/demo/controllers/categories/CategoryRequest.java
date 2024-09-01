@@ -1,4 +1,4 @@
-package com.uade.tpo.demo.entity.dto;
+package com.uade.tpo.demo.controllers.categories;
 
 import lombok.Data;
 
@@ -6,9 +6,4 @@ import lombok.Data;
 public class CategoryRequest {
     private int id;
     private String description;
-}
-
-public class OrdenesComprasRequest{
-    private 
-
 }
