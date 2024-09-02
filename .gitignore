@@ -31,7 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-# Ignorar application.properties y pom.xml
-application.properties
-pom.xml
