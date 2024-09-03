@@ -1,4 +1,4 @@
-package com.uade.tpo.demo.controllers.categories;
+package com.uade.tpo.demo.controllers.directors;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
