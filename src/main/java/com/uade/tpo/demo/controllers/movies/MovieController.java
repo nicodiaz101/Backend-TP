@@ -1,4 +1,4 @@
-package com.uade.tpo.demo.controllers.categories;
+package com.uade.tpo.demo.controllers.movies;
 
 import java.util.Optional;
 
