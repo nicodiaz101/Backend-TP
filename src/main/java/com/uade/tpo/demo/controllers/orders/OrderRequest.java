@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class OrderRequest{
-
+    //PRECIO, CANTIDAD, NOMBRE PELICULA, DESCUENTO, TOTAL (POST Y GET)
 }
