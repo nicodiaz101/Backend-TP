@@ -9,7 +9,7 @@ import com.uade.tpo.demo.entity.Order;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    //Optional<Order> findByUserId(Long userId);    VEREMOS SI HACE FALTA
+    Optional<Order> findByUserId(Long userId);
     //Optional<Order> findByMovieId(Long movieId);  VEREMOS SI HACE FALTA
-    Optional<Order> findByDate(String date);
+    //Optional<Order> findByDate(String date);  VEREMOS SI HACE FALTA
 }
