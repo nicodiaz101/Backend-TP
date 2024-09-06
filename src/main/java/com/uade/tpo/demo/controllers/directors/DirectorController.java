@@ -30,5 +30,4 @@ public class DirectorController {
             return director.map(ResponseEntity::ok)
                         .orElseGet(() -> ResponseEntity.notFound().build());
         }
-        // 
 }
