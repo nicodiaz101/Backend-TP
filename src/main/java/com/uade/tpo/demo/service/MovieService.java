@@ -21,4 +21,10 @@ public class MovieService {
     public Optional<Movie> getMovieByTitle(String title) {
         return movieRepository.findByTitle(title);
     }
+
+    public double calculateFinalPrice(Movie movie) {
+        return movie.getPrice() - (movie.getPrice() * movie.getDiscountPercentage() / 100);
+    }
+
+    
 }

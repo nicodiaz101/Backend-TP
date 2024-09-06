@@ -41,6 +41,9 @@ public class Movie {
     private double price;
 
     @Column(nullable = false)
+    private double discountPercentage;
+
+    @Column(nullable = false)
     private int stock;
 
     @ManyToOne 

@@ -10,5 +10,4 @@ import com.uade.tpo.demo.entity.Director;
 public interface DirectorRepository extends JpaRepository<Director, Long> {
     // Método para buscar un director por su nombre
     Optional<Director> findByName(String name);
-    Optional<Director> findById(Long id);
 }
