@@ -25,6 +25,13 @@ public class MovieService {
     public double calculateFinalPrice(Movie movie) {
         return movie.getPrice() - (movie.getPrice() * movie.getDiscountPercentage() / 100);
     }
-
-    
+    public Object createMovie(Movie movie) {
+        return movieRepository.save(movie);
+    }
+    public void deleteMovie(Long id) {
+        movieRepository.deleteById(id);
+    }
+    public void modifyMovie(Movie movie) {
+        movieRepository.save(movie);
+    }
 }
