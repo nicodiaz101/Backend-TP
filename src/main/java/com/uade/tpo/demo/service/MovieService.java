@@ -14,6 +14,9 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+
+
+
     public Optional<Movie> getMovieById(Long id) {
         return movieRepository.findById(id);
     }
@@ -26,5 +29,6 @@ public class MovieService {
         return movie.getPrice() - (movie.getPrice() * movie.getDiscountPercentage() / 100);
     }
 
+    
     
 }
