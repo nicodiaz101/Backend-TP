@@ -105,11 +105,17 @@ public class OrderService {
         }
     }
 
-    public void deleteOrderById(Long id) {
-        orderRepository.deleteById(id);
+    public boolean deleteOrderById(Long id) {
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void deleteAllOrders() {
+    public boolean deleteAllOrders() {
         orderRepository.deleteAll();
+        return true;
     }
 }
