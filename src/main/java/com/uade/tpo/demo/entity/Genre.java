@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long genre_id;
+    private Long genreId;
 
     @Column(nullable = false)
     private String name;

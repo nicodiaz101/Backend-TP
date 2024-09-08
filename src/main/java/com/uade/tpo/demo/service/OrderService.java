@@ -56,7 +56,7 @@ public class OrderService {
         // Crear y guardar la orden
         Order order = new Order(); // Crear una nueva orden
         order.setAmount(finalAmount);
-        order.setOrder_date(new Date()); // Fecha actual
+        order.setOrderDate(new Date()); // Fecha actual
         order.setUser(user);
         order.setMovies(movies);
 
@@ -96,7 +96,7 @@ public class OrderService {
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             order.setAmount(orderDetails.getAmount());
-            order.setOrder_date(orderDetails.getOrder_date());
+            order.setOrderDate(orderDetails.getOrderDate());
             order.setUser(orderDetails.getUser());
             order.setMovies(orderDetails.getMovies());
             return orderRepository.save(order);

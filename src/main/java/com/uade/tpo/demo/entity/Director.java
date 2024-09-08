@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class Director{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long director_id;
+    private Long directorId;
 
     @Column(nullable = false)
     private String name;

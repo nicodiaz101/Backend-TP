@@ -26,8 +26,22 @@ public class MovieService {
         return movieRepository.findByTitle(title);
     }
 
-    public Movie modifyMovie(Movie movie) {
-        return movieRepository.save(movie);
+    public Movie modifyMovie(Long id, Movie movieDetails) {
+        Optional<Movie> optionalMovie = movieRepository.findById(id);
+        if (optionalMovie.isPresent()) {
+            Movie movie = optionalMovie.get();
+            movie.setTitle(movieDetails.getTitle());
+            movie.setReleaseDate(movieDetails.getReleaseDate());
+            movie.setImdbScore(movieDetails.getImdbScore());
+            movie.setPrice(movieDetails.getPrice());
+            movie.setDiscountPercentage(movieDetails.getDiscountPercentage());
+            movie.setStock(movieDetails.getStock());
+            movie.setGenre(movieDetails.getGenre());
+            movie.setDirector(movieDetails.getDirector());
+            return movieRepository.save(movie);
+        } else { // Orden no encontrada
+            return null;
+        }
     }
 
     public boolean deleteMovieById(Long id) {

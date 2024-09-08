@@ -15,7 +15,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.user.userId = :userId")
     List<Order> findByUserUserId(@Param("userId") Long userId);
 
-    @Query("SELECT o FROM Order o WHERE DATE(o.order_date) = :orderDate")
+    @Query("SELECT o FROM Order o WHERE DATE(o.orderDate) = :orderDate")
     List<Order> findByOrderDate(@Param("orderDate") Date orderDate);
 
     //Optional<Order> findByMovieId(Long movieId);  VEREMOS SI HACE FALTA

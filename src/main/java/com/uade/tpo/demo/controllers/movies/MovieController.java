@@ -30,7 +30,7 @@ public class MovieController {
     public ResponseEntity<Object> createMovie(@RequestBody Movie movie) {
         try{
         Movie result = movieService.createMovie(movie);
-        return ResponseEntity.created(URI.create("/movies/" + result.getMovie_id())).body(result);
+        return ResponseEntity.created(URI.create("/movies/" + result.getMovieId())).body(result);
         } catch (RuntimeException e) {
             return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -43,7 +43,7 @@ public class MovieController {
                     .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/movies")
+    @GetMapping
     public ResponseEntity<Movie> getMovieByTitle(@RequestParam String title) {
         Optional<Movie> movie = movieService.getMovieByTitle(title);
         return movie.map(ResponseEntity::ok)
@@ -51,12 +51,17 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> modifyMovie(@RequestBody Movie movie) {
-        Movie modifiedMovie = movieService.modifyMovie(movie);
-        if (modifiedMovie != null) {
-            return ResponseEntity.ok().location(URI.create("/movies/" + modifiedMovie.getMovie_id())).body(modifiedMovie);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> modifyMovie(@PathVariable Long id, @RequestBody Movie movieDetails) {
+        try{
+            Movie modifiedMovie = movieService.modifyMovie(id, movieDetails);
+            if (modifiedMovie != null) {
+                return ResponseEntity.ok().location(URI.create("/movies/" + modifiedMovie.getMovieId())).body(modifiedMovie);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }   
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }   
     }
 

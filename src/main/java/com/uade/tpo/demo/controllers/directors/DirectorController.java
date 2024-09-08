@@ -19,14 +19,14 @@ public class DirectorController {
         @Autowired
         private DirectorService directorService;
     
-        @GetMapping("/directors/{id}")
+        @GetMapping("/{id}")
         public ResponseEntity<Director> getDirectorById(@PathVariable Long id) {
             Optional<Director> director = directorService.getDirectorById(id);
             return director.map(ResponseEntity::ok)
                         .orElseGet(() -> ResponseEntity.notFound().build());
         }
     
-        @GetMapping("/directors")
+        @GetMapping
         public ResponseEntity<Director> getDirectorByName(@RequestParam String name) {
             Optional<Director> director = directorService.getDirectorByName(name);
             return director.map(ResponseEntity::ok)

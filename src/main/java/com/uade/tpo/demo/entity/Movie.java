@@ -26,16 +26,16 @@ import lombok.NoArgsConstructor;
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long movie_id;
+    private Long movieId;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private Date release_date;
+    private Date releaseDate;
 
     @Column
-    private double imdb_score;
+    private double imdbScore;
     
     @Column(nullable = false)
     private double price;
@@ -47,11 +47,11 @@ public class Movie {
     private int stock;
 
     @ManyToOne 
-    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id", nullable = false)
+    @JoinColumn(name = "genreId", referencedColumnName = "genreId", nullable = false)
     private Genre genre;
 
     @ManyToOne
-    @JoinColumn(name = "director_id", referencedColumnName = "director_id", nullable = false)
+    @JoinColumn(name = "directorId", referencedColumnName = "directorId", nullable = false)
     private Director director;
     
     @ManyToMany(mappedBy = "movies")

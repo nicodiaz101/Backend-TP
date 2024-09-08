@@ -37,7 +37,7 @@ public class OrderController {
                                                     orderRequest.getMovies().stream()
                                                                 .map(MovieRequest::getTitle)
                                                                 .toList());
-            return ResponseEntity.created(URI.create("/orders/" + result.getOrder_id())).body(result);
+            return ResponseEntity.created(URI.create("/orders/" + result.getOrderId())).body(result);
         } catch (RuntimeException e) {
             return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -83,7 +83,7 @@ public class OrderController {
         try{
             Order updatedOrder = orderService.updateOrder(id, orderDetails);
             if (updatedOrder != null) {
-                return ResponseEntity.ok().location(URI.create("/orders/" + updatedOrder.getOrder_id())).body(updatedOrder);
+                return ResponseEntity.ok().location(URI.create("/orders/" + updatedOrder.getOrderId())).body(updatedOrder);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }   

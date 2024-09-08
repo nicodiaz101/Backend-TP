@@ -11,5 +11,4 @@ import com.uade.tpo.demo.entity.Movie;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     // Método para buscar una película por su título
     Optional<Movie> findByTitle(String titleString);
-    Optional<Movie> findByMovieId(Long id);
 }

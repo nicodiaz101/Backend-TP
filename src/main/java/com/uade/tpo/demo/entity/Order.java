@@ -27,23 +27,23 @@ import lombok.NoArgsConstructor;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long order_id;
+    private Long orderId;
     
     @Column(nullable = false)
     private double amount;
 
     @Column(nullable = false)
-    private Date order_date;
+    private Date orderDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
     private User user;
 
     @ManyToMany
     @JoinTable(
         name = "order_movie",
-        joinColumns = @JoinColumn(name = "order_id"),
-        inverseJoinColumns = @JoinColumn(name = "movie_id")
+        joinColumns = @JoinColumn(name = "orderId"),
+        inverseJoinColumns = @JoinColumn(name = "movieId")
     )
     private List<Movie> movies;
 }
