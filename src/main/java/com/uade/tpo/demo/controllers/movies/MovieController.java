@@ -1,13 +1,18 @@
 package com.uade.tpo.demo.controllers.movies;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,35 +20,53 @@ import com.uade.tpo.demo.entity.Movie;
 import com.uade.tpo.demo.service.MovieService;
 
 @RestController
+@RequestMapping("/movies")
 public class MovieController {
 
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/movies/{id}")
+    @PostMapping
+    public ResponseEntity<Object> createMovie(@RequestBody Movie movie) {
+        try{
+        Movie result = movieService.createMovie(movie);
+        return ResponseEntity.created(URI.create("/movies/" + result.getMovie_id())).body(result);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         Optional<Movie> movie = movieService.getMovieById(id);
         return movie.map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @GetMapping("/movies")
     public ResponseEntity<Movie> getMovieByTitle(@RequestParam String title) {
         Optional<Movie> movie = movieService.getMovieByTitle(title);
         return movie.map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PostMapping("/movies")
-    public ResponseEntity<Object> createMovie(@RequestBody Movie movie) {
-        return ResponseEntity.ok(movieService.createMovie(movie));
-    }
-    @PostMapping("/movies/{id}")
+
+    @PutMapping("/{id}")
     public ResponseEntity<Object> modifyMovie(@RequestBody Movie movie) {
-        movieService.modifyMovie(movie);
-        return ResponseEntity.ok().build();
+        Movie modifiedMovie = movieService.modifyMovie(movie);
+        if (modifiedMovie != null) {
+            return ResponseEntity.ok().location(URI.create("/movies/" + modifiedMovie.getMovie_id())).body(modifiedMovie);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }   
     }
-    @PostMapping("/movies/{id}")
-    public ResponseEntity<Object> deleteMovie(@PathVariable Long id) {
-        movieService.deleteMovie(id);
-        return ResponseEntity.ok().build();
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteMovieById(@PathVariable Long id) {
+        boolean isDeleted = movieService.deleteMovieById(id);
+            if (isDeleted) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
     }
 }

@@ -14,7 +14,7 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Object createMovie(Movie movie) {
+    public Movie createMovie(Movie movie) {
         return movieRepository.save(movie);
     }
 
@@ -25,13 +25,18 @@ public class MovieService {
     public Optional<Movie> getMovieByTitle(String title) {
         return movieRepository.findByTitle(title);
     }
-  
-    public void modifyMovie(Movie movie) {
-        movieRepository.save(movie);
+
+    public Movie modifyMovie(Movie movie) {
+        return movieRepository.save(movie);
     }
-  
-    public void deleteMovie(Long id) {
-        movieRepository.deleteById(id);
+
+    public boolean deleteMovieById(Long id) {
+        if (movieRepository.existsById(id)) {
+            movieRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public double calculateFinalPrice(Movie movie) {
