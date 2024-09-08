@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +38,14 @@ public class MovieController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<Page<Movie>> getMovies(@RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size) {
+        if (page == null || size == null)
+            return ResponseEntity.ok(movieService.getMovies(PageRequest.of(0, Integer.MAX_VALUE)));
+        return ResponseEntity.ok(movieService.getMovies(PageRequest.of(page, size)));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         Optional<Movie> movie = movieService.getMovieById(id);
@@ -43,7 +53,7 @@ public class MovieController {
                     .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping
+    @GetMapping("/title")
     public ResponseEntity<Movie> getMovieByTitle(@RequestParam String title) {
         Optional<Movie> movie = movieService.getMovieByTitle(title);
         return movie.map(ResponseEntity::ok)
@@ -66,12 +76,26 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteMovieById(@PathVariable Long id) {
-        boolean isDeleted = movieService.deleteMovieById(id);
+    public ResponseEntity<HttpStatus> deleteMovieById(@PathVariable Long id) {
+        try {
+            boolean isDeleted = movieService.deleteMovieById(id);
             if (isDeleted) {
                 return ResponseEntity.noContent().build();
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deleteAllMovies() {
+        try {
+            movieService.deleteAllMovies();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

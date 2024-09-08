@@ -3,7 +3,10 @@ package com.uade.tpo.demo.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.tpo.demo.entity.Movie;
 import com.uade.tpo.demo.repository.MovieRepository;
@@ -14,8 +17,13 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Transactional(rollbackFor = Throwable.class)
     public Movie createMovie(Movie movie) {
         return movieRepository.save(movie);
+    }
+
+    public Page<Movie> getMovies(PageRequest pageable) {
+        return movieRepository.findAll(pageable);
     }
 
     public Optional<Movie> getMovieById(Long id) {
@@ -51,6 +59,11 @@ public class MovieService {
         } else {
             return false;
         }
+    }
+
+    public boolean deleteAllMovies() {
+        movieRepository.deleteAll();
+        return true;
     }
 
     public double calculateFinalPrice(Movie movie) {
