@@ -23,7 +23,7 @@ import com.uade.tpo.demo.service.UserService;
 public class UserController {
 
     @Autowired
-    private UserService userService;  // Asegúrate de tener un servicio para manejar la lógica de negocio
+    private UserService userService;
 
     // Crear un nuevo usuario
     @PostMapping
