@@ -98,4 +98,12 @@ public class MovieController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<Page<Movie>> getAvailableMovies(@RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size) {
+        if (page == null || size == null)
+            return ResponseEntity.ok(movieService.getAvailableMovies());
+        return ResponseEntity.ok(movieService.getAvailableMovies());
+    }
 }

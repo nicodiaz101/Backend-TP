@@ -69,4 +69,8 @@ public class MovieService {
     public double calculateFinalPrice(Movie movie) {
         return movie.getPrice() - (movie.getPrice() * movie.getDiscountPercentage() / 100);
     }
+
+    public Page<Movie> getAvailableMovies() {
+        return movieRepository.findByStockGreaterThan(0);
+    }
 }
