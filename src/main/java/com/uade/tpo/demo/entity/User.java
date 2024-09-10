@@ -30,13 +30,13 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     @Id
     @GeneratedValue
-    Integer id;
+    Integer userId;
     @Basic
     @Column(nullable = false)
     String username;
     @Column(nullable = false)
-    String lastname;
-    String firstname;
+    String lastName;
+    String firstName;
     String country;
     String password;
     @Enumerated(EnumType.STRING) 
