@@ -19,7 +19,6 @@ import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.OrderRepository;
 import com.uade.tpo.demo.repository.UserRepository;
 
-
 @Service
 public class OrderService {
     
@@ -43,7 +42,7 @@ public class OrderService {
         List<Movie> movies = new ArrayList<>(); // Lista de películas
         for (String movieTitle : movieTitles) {
             Optional<Movie> optionalMovie = movieService.getMovieByTitle(movieTitle);
-            if (!optionalMovie.isPresent()) {
+            if (!optionalMovie.isPresent() || optionalMovie.get().getStock() == 0) { // Película no encontrada o sin stock
                 throw new RuntimeException("Movie not found: " + movieTitle);
             }
             finalAmount = finalAmount + movieService.calculateFinalPrice(optionalMovie.get());

@@ -46,7 +46,7 @@ public class UserController {
     }
 
     // Actualizar un usuario
-   
+
 
     // Eliminar un usuario
     @DeleteMapping("/{id}")
