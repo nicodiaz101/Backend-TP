@@ -46,6 +46,14 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getMovies(PageRequest.of(page, size)));
     }
 
+    @GetMapping("/available")
+    public ResponseEntity<Page<Movie>> getAvailableMovies(@RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size) {
+        if (page == null || size == null)
+            return ResponseEntity.ok(movieService.getMovies(PageRequest.of(0, Integer.MAX_VALUE)));
+        return ResponseEntity.ok(movieService.getMovies(PageRequest.of(page, size)));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         Optional<Movie> movie = movieService.getMovieById(id);
@@ -97,13 +105,5 @@ public class MovieController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @GetMapping("/available")
-    public ResponseEntity<Page<Movie>> getAvailableMovies(@RequestParam(required = false) Integer page,
-    @RequestParam(required = false) Integer size) {
-        if (page == null || size == null)
-            return ResponseEntity.ok(movieService.getAvailableMovies());
-        return ResponseEntity.ok(movieService.getAvailableMovies());
     }
 }

@@ -65,12 +65,12 @@ public class MovieService {
         movieRepository.deleteAll();
         return true;
     }
+    
+    public Page<Movie> getAvailableMovies(PageRequest pageable) {
+        return movieRepository.findByStockGreaterThan(0, pageable);
+    }
 
     public double calculateFinalPrice(Movie movie) {
         return movie.getPrice() - (movie.getPrice() * movie.getDiscountPercentage() / 100);
-    }
-
-    public Page<Movie> getAvailableMovies() {
-        return movieRepository.findByStockGreaterThan(0);
     }
 }
