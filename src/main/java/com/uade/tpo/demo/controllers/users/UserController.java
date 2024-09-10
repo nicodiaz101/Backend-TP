@@ -47,11 +47,7 @@ public class UserController {
     }
 
     // Actualizar un usuario
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
+   
 
     // Eliminar un usuario
     @DeleteMapping("/{id}")

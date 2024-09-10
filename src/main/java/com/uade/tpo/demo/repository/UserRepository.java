@@ -9,6 +9,10 @@ import com.uade.tpo.demo.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String mail);
+    static Optional<User> findByEmail(String mail) {
+        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+    }
+    Optional<User> findByUsername(String username);
+    boolean existsById(Integer id); 
 }
 

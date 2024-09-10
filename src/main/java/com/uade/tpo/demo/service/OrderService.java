@@ -27,15 +27,12 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private MovieService movieService;
 
     @Transactional(rollbackFor = Throwable.class)
     public Order createOrder(String userEmail, List<String> movieTitles) {
         // Encontrar el usuario por email
-        Optional<User> optionalUser = userRepository.findByEmail(userEmail);
+        Optional<User> optionalUser = UserRepository.findByEmail(userEmail);
         if (!optionalUser.isPresent()) {
             throw new RuntimeException("User not found");
         }
@@ -46,7 +43,7 @@ public class OrderService {
         List<Movie> movies = new ArrayList<>(); // Lista de películas
         for (String movieTitle : movieTitles) {
             Optional<Movie> optionalMovie = movieService.getMovieByTitle(movieTitle);
-            if (!optionalMovie.isPresent() || optionalMovie.get().getStock() == 0) {
+            if (!optionalMovie.isPresent()) {
                 throw new RuntimeException("Movie not found: " + movieTitle);
             }
             finalAmount = finalAmount + movieService.calculateFinalPrice(optionalMovie.get());
@@ -80,8 +77,7 @@ public class OrderService {
             Date date = convertStringToDate(orderDate);
             return orderRepository.findByOrderDate(date);
         } catch (ParseException e) { // Formato de fecha incorrecto
-            e.printStackTrace();
-            return List.of();
+                        return List.of();
         }
     }
     

@@ -18,7 +18,8 @@
 		<spring-security.version>6.3.0</spring-security.version>
 		<spring.version>6.1.7</spring.version>
 	</properties>
-	<dependencies>
+	
+    <dependencies>
 
     <dependency>
         <groupId>io.jsonwebtoken</groupId>

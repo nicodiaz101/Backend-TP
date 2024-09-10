@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class UserService {
 
@@ -27,15 +25,6 @@ public class UserService {
 
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
-    }
-
-    public User updateUser(Long id, User user) {
-        if (userRepository.existsById(id)) {
-            user.setUserId(id);
-            return userRepository.save(user);
-        } else {
-            throw new EntityNotFoundException("User not found with ID " + id);
-        }
     }
 
     public boolean deleteUser(Long id) {
