@@ -46,6 +46,11 @@ public class UserController {
     }
 
     // Actualizar un usuario
+    @PostMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        User updatedUser = userService.updateUser(id, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
 
 
     // Eliminar un usuario

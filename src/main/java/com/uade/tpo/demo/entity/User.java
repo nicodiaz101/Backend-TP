@@ -13,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -26,33 +27,38 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
-    Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
     @Basic
     @Column(nullable = false)
-    String username;
+    private String username;
     @Column(nullable = false)
-    String lastName;
-    String firstName;
-    String country;
-    String password;
+    private String email;
+    @Column(nullable = false)
+    private String lastName;
+    @Column(nullable = false)
+    private String firstName;
+    @Column(nullable = false)
+    private String country;
+    @Column(nullable = false)
+    private String password;
     @Enumerated(EnumType.STRING) 
-    Role role;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      return List.of(new SimpleGrantedAuthority((role.name())));
+        return List.of(new SimpleGrantedAuthority((role.name())));
     }
     @Override
     public boolean isAccountNonExpired() {
-       return true;
+        return true;
     }
     @Override
     public boolean isAccountNonLocked() {
-       return true;
+        return true;
     }
     @Override
     public boolean isCredentialsNonExpired() {

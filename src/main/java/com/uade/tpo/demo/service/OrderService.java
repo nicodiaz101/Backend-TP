@@ -17,7 +17,6 @@ import com.uade.tpo.demo.entity.Movie;
 import com.uade.tpo.demo.entity.Order;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.OrderRepository;
-import com.uade.tpo.demo.repository.UserRepository;
 
 @Service
 public class OrderService {
@@ -28,10 +27,13 @@ public class OrderService {
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private UserService userService;
+
     @Transactional(rollbackFor = Throwable.class)
     public Order createOrder(String userEmail, List<String> movieTitles) {
         // Encontrar el usuario por email
-        Optional<User> optionalUser = UserRepository.findByEmail(userEmail);
+        Optional<User> optionalUser = userService.getUserByEmail(userEmail);
         if (!optionalUser.isPresent()) {
             throw new RuntimeException("User not found");
         }
