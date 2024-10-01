@@ -8,7 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.tpo.demo.controllers.movies.MovieRequest;
+import com.uade.tpo.demo.entity.Director;
+import com.uade.tpo.demo.entity.Genre;
 import com.uade.tpo.demo.entity.Movie;
+import com.uade.tpo.demo.exceptions.ResourceNotFoundException;
 import com.uade.tpo.demo.repository.MovieRepository;
 
 @Service
@@ -17,9 +21,44 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private GenreService genreService;
+    
+    @Autowired
+    private DirectorService directorService;
+    
+
     @Transactional(rollbackFor = Throwable.class)
-    public Movie createMovie(Movie movie) {
-        return movieRepository.save(movie);
+    public Movie createMovie(MovieRequest movieRequest) {
+        Movie movie = new Movie();
+        movie.setTitle(movieRequest.getTitle());
+        movie.setReleaseDate(movieRequest.getReleaseDate());
+        movie.setImdbScore(movieRequest.getImdbScore());
+        movie.setPrice(movieRequest.getPrice());
+        movie.setDiscountPercentage(movieRequest.getDiscountPercentage());
+        movie.setStock(movieRequest.getStock());
+
+        // Buscar y asignar el género
+        Genre genre = genreService.getGenreById(movieRequest.getGenreId())
+                .orElseThrow(() -> new ResourceNotFoundException("Genre not found"));
+        movie.setGenre(genre);
+
+        // Buscar y asignar el director
+        Director director = directorService.getDirectorById(movieRequest.getDirectorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Director not found"));
+        movie.setDirector(director);
+        
+        // Guardar la película
+        Movie savedMovie = movieRepository.save(movie);
+
+        // Agregar la película a la lista de películas del género y del director
+        genre.getMovies().add(savedMovie);
+        genreService.modifyGenre(genre.getGenreId(), genre);
+
+        director.getMovies().add(savedMovie);
+        directorService.modifyDirector(director.getDirectorId(), director);
+
+        return savedMovie;
     }
 
     public Page<Movie> getMovies(PageRequest pageable) {

@@ -29,9 +29,9 @@ public class MovieController {
     private MovieService movieService;
 
     @PostMapping
-    public ResponseEntity<Object> createMovie(@RequestBody Movie movie) {
+    public ResponseEntity<Object> createMovie(@RequestBody MovieRequest movieRequest) {
         try{
-        Movie result = movieService.createMovie(movie);
+        Movie result = movieService.createMovie(movieRequest);
         return ResponseEntity.created(URI.create("/movies/" + result.getMovieId())).body(result);
         } catch (RuntimeException e) {
             return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);

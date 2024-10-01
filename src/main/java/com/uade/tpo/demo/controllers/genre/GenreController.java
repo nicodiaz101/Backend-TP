@@ -22,7 +22,7 @@ import com.uade.tpo.demo.entity.Genre;
 import com.uade.tpo.demo.service.GenreService;
 
 @RestController
-@RequestMapping("/genre")
+@RequestMapping("/genres")
 public class GenreController {
     @Autowired
     private GenreService genreService;

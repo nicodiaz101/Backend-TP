@@ -2,6 +2,8 @@ package com.uade.tpo.demo.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,5 +31,6 @@ public class Director{
     private String name;
     
     @OneToMany(mappedBy = "director")
+    @JsonBackReference
     private List<Movie> movies;
 }

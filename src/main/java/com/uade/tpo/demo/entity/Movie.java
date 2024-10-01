@@ -3,6 +3,8 @@ package com.uade.tpo.demo.entity;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,10 +50,12 @@ public class Movie {
 
     @ManyToOne 
     @JoinColumn(name = "genreId", referencedColumnName = "genreId", nullable = false)
+    @JsonManagedReference
     private Genre genre;
 
     @ManyToOne
     @JoinColumn(name = "directorId", referencedColumnName = "directorId", nullable = false)
+    @JsonManagedReference
     private Director director;
     
     @ManyToMany(mappedBy = "movies")

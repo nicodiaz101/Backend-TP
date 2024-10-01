@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.demo.controllers.Jwt.JwtService;
-import com.uade.tpo.demo.entity.Role;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
 
@@ -25,7 +24,7 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user=userRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token=jwtService.getToken(user);
+        String token=jwtService.generateToken(user);
         return AuthResponse.builder()
             .token(token)
             .build();
@@ -40,13 +39,13 @@ public class AuthService {
             .firstName(request.getFirstname())
             .lastName(request.getLastname())
             .country(request.getCountry())
-            .role(Role.USER)
+            .role(request.getRole())
             .build();
 
         userRepository.save(user);
 
         return AuthResponse.builder()
-            .token(jwtService.getToken(user))
+            .token(jwtService.generateToken(user))
             .build();
         
     }

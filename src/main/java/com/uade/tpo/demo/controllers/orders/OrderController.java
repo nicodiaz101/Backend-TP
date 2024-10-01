@@ -34,9 +34,7 @@ public class OrderController {
     public ResponseEntity<Object> createOrder(@RequestBody OrderRequest orderRequest) {
         try {
             Order result = orderService.createOrder(orderRequest.getUser().getEmail() , 
-                                                    orderRequest.getMovies().stream()
-                                                                .map(MovieRequest::getTitle)
-                                                                .toList());
+                                                    orderRequest.getMovies());
             return ResponseEntity.created(URI.create("/orders/" + result.getOrderId())).body(result);
         } catch (RuntimeException e) {
             return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);

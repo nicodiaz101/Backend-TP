@@ -38,6 +38,7 @@ public class GenreService {
         if (optionalGenre.isPresent()) {
             Genre genre = optionalGenre.get();
             genre.setName(genreDetails.getName());
+            genre.setMovies(genreDetails.getMovies());
             return genreRepository.save(genre);
         } else { // Género no encontrado
             return null;

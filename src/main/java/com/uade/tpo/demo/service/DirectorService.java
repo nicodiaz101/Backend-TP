@@ -38,6 +38,7 @@ public class DirectorService {
         if (optionalDirector.isPresent()) {
             Director director = optionalDirector.get();
             director.setName(directorDetails.getName());
+            director.setMovies(directorDetails.getMovies());
             return directorRepository.save(director);
         } else { // Director no encontrado
             return null;
