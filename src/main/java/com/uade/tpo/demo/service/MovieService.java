@@ -37,6 +37,7 @@ public class MovieService {
         movie.setPrice(movieRequest.getPrice());
         movie.setDiscountPercentage(movieRequest.getDiscountPercentage());
         movie.setStock(movieRequest.getStock());
+        movie.setImageUrl(movieRequest.getImageUrl());
 
         // Buscar y asignar el género
         Genre genre = genreService.getGenreById(movieRequest.getGenreId())
@@ -73,7 +74,7 @@ public class MovieService {
         return movieRepository.findByTitle(title);
     }
 
-    public Movie modifyMovie(Long id, Movie movieDetails) {
+    public Movie modifyMovie(Long id, MovieRequest movieDetails) {
         Optional<Movie> optionalMovie = movieRepository.findById(id);
         if (optionalMovie.isPresent()) {
             Movie movie = optionalMovie.get();
@@ -83,8 +84,18 @@ public class MovieService {
             movie.setPrice(movieDetails.getPrice());
             movie.setDiscountPercentage(movieDetails.getDiscountPercentage());
             movie.setStock(movieDetails.getStock());
-            movie.setGenre(movieDetails.getGenre());
-            movie.setDirector(movieDetails.getDirector());
+            movie.setImageUrl(movieDetails.getImageUrl());
+
+            // Buscar y asignar el género
+            Genre genre = genreService.getGenreById(movieDetails.getGenreId())
+            .orElseThrow(() -> new ResourceNotFoundException("Genre not found"));
+            movie.setGenre(genre);
+
+            // Buscar y asignar el director
+            Director director = directorService.getDirectorById(movieDetails.getDirectorId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Director not found"));
+            movie.setDirector(director);
+
             return movieRepository.save(movie);
         } else { // Orden no encontrada
             return null;

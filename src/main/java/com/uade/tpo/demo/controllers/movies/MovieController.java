@@ -50,8 +50,8 @@ public class MovieController {
     public ResponseEntity<Page<Movie>> getAvailableMovies(@RequestParam(required = false) Integer page,
     @RequestParam(required = false) Integer size) {
         if (page == null || size == null)
-            return ResponseEntity.ok(movieService.getMovies(PageRequest.of(0, Integer.MAX_VALUE)));
-        return ResponseEntity.ok(movieService.getMovies(PageRequest.of(page, size)));
+            return ResponseEntity.ok(movieService.getAvailableMovies(PageRequest.of(0, Integer.MAX_VALUE)));
+        return ResponseEntity.ok(movieService.getAvailableMovies(PageRequest.of(page, size)));
     }
 
     @GetMapping("/{id}")
@@ -69,7 +69,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> modifyMovie(@PathVariable Long id, @RequestBody Movie movieDetails) {
+    public ResponseEntity<Object> modifyMovie(@PathVariable Long id, @RequestBody MovieRequest movieDetails) {
         try{
             Movie modifiedMovie = movieService.modifyMovie(id, movieDetails);
             if (modifiedMovie != null) {
@@ -80,7 +80,7 @@ public class MovieController {
         }
         catch (RuntimeException e) {
             return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }   
+        }
     }
 
     @DeleteMapping("/{id}")

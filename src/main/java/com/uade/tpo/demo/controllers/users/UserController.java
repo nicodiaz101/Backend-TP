@@ -1,5 +1,6 @@
 package com.uade.tpo.demo.controllers.users;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -47,10 +48,19 @@ public class UserController {
 
     // Actualizar un usuario
     @PostMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
+    public ResponseEntity<Object> updateUser(@PathVariable("id") Long id, @RequestBody User userDetails) {
+        try{
+            User updatedUser = userService.updateUser(id, userDetails);
+            if (updatedUser != null){
+            return ResponseEntity.ok().location(URI.create("/users/" + updatedUser.getUserId())).body(updatedUser);
+            } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>("Bad Request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }    
 
 
     // Eliminar un usuario

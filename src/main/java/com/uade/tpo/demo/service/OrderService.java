@@ -38,7 +38,7 @@ public class OrderService {
             throw new RuntimeException("User not found");
         }
         User user = optionalUser.get(); // Obtener el usuario
-
+        
         // Encontrar las películas por título y calcular monto final
         double finalAmount = 0;
         List<Movie> movies = new ArrayList<>(); // Lista de películas
@@ -50,13 +50,17 @@ public class OrderService {
             finalAmount = finalAmount + movieService.calculateFinalPrice(optionalMovie.get());
             movies.add(optionalMovie.get());
         }
-
+        
         // Crear y guardar la orden
         Order order = new Order(); // Crear una nueva orden
         order.setAmount(finalAmount);
         order.setOrderDate(new Date()); // Fecha actual
         order.setUser(user);
         order.setMovies(movies);
+        
+        // Actualizar las ordenes del usuario
+        user.getOrders().add(order);
+        userService.updateUser(user.getUserId(), user);
 
         return orderRepository.save(order);
     }

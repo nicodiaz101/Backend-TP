@@ -3,6 +3,8 @@ package com.uade.tpo.demo.entity;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +39,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
+    @JsonManagedReference
     private User user;
 
     @ManyToMany
@@ -45,5 +48,6 @@ public class Order {
         joinColumns = @JoinColumn(name = "orderId"),
         inverseJoinColumns = @JoinColumn(name = "movieId")
     )
+    @JsonManagedReference
     private List<Movie> movies;
 }

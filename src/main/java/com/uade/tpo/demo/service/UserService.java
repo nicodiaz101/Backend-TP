@@ -31,9 +31,23 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User updateUser(Long id, User user) {
-        user.setUserId(id);
-        return userRepository.save(user);
+    public User updateUser(Long id, User userDetails) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setCountry(userDetails.getCountry());
+            user.setEmail(userDetails.getEmail());
+            user.setFirstName(userDetails.getFirstName());
+            user.setLastName(userDetails.getLastName());
+            user.setPassword(userDetails.getPassword());
+            user.setUsername(userDetails.getUsername());
+            user.setRole(userDetails.getRole());
+            user.setOrders(userDetails.getOrders());
+
+            return userRepository.save(user);
+        } else { // User no encontrado
+            return null;
+        }
     }
 
     public boolean deleteUser(Long id) {

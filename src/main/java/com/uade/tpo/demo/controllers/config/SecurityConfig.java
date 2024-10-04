@@ -31,13 +31,13 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(req -> req.requestMatchers("/api/v1/auth/**").permitAll()
                                                 .requestMatchers("/error/**").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
-                                                .requestMatchers("api/users/**").hasAuthority("ADMIN")
+                                                .requestMatchers("/users/**").hasAuthority("ADMIN")
                                                 .requestMatchers("/movies/**").hasAuthority("ADMIN")
                                                 .requestMatchers("/genres/**").hasAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.POST, "/orders").hasAnyAuthority("USER", "ADMIN") // Permitir crear órdenes para todos
                                                 .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAuthority("ADMIN") // Restringir DELETE a ADMIN
                                                 .requestMatchers(HttpMethod.PUT, "/orders/**").hasAuthority("ADMIN") // Restringir PUT a ADMIN
-                                                .requestMatchers(HttpMethod.GET, "/orders/**").hasAuthority("USER") // Permitir GET a usuarios autenticados
+                                                .requestMatchers(HttpMethod.GET, "/orders/**").hasAnyAuthority("USER", "ADMIN") // Permitir ver órdenes para todos
                                                 .requestMatchers("/directors/**").hasAuthority("ADMIN")
                                                 .anyRequest()
                                                 .authenticated())
