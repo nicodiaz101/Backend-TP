@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class Movie {
     @Column(nullable = false)
     private Date releaseDate;
 
-    @Column
+    @Column(nullable = false)
     private double imdbScore;
     
     @Column(nullable = false)
@@ -53,7 +54,10 @@ public class Movie {
     private int stock;
 
     @Column(nullable = false)
-    private String imageUrl; // Nuevo atributo para la URL de la imagen
+    private String poster; // Nuevo atributo para la URL de la imagen
+
+    @Column(nullable = false)
+    private String description; // Nueva descripción de la película
 
     @ManyToOne 
     @JoinColumn(name = "genreId", referencedColumnName = "genreId", nullable = false)
@@ -65,7 +69,7 @@ public class Movie {
     @JsonManagedReference
     private Director director;
     
-    @ManyToMany(mappedBy = "movies")
+    @ManyToMany(mappedBy = "movies", cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Order> orders;
 }

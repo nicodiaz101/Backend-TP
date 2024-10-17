@@ -1,5 +1,6 @@
 package com.uade.tpo.demo.service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import com.uade.tpo.demo.controllers.movies.MovieRequest;
 import com.uade.tpo.demo.entity.Director;
 import com.uade.tpo.demo.entity.Genre;
 import com.uade.tpo.demo.entity.Movie;
-import com.uade.tpo.demo.exceptions.ResourceNotFoundException;
 import com.uade.tpo.demo.repository.MovieRepository;
 
 @Service
@@ -37,16 +37,27 @@ public class MovieService {
         movie.setPrice(movieRequest.getPrice());
         movie.setDiscountPercentage(movieRequest.getDiscountPercentage());
         movie.setStock(movieRequest.getStock());
-        movie.setImageUrl(movieRequest.getImageUrl());
+        movie.setPoster(movieRequest.getPoster());
+        movie.setDescription(movieRequest.getDescription());
 
         // Buscar y asignar el género
-        Genre genre = genreService.getGenreById(movieRequest.getGenreId())
-                .orElseThrow(() -> new ResourceNotFoundException("Genre not found"));
+        Genre genre = genreService.getGenreByName(movieRequest.getGenre())
+                .orElseGet(() -> {
+                    Genre newGenre = new Genre();
+                    newGenre.setName(movieRequest.getGenre());
+                    newGenre.setMovies(new ArrayList<>());
+                    return genreService.createGenre(newGenre);
+                });
         movie.setGenre(genre);
 
         // Buscar y asignar el director
-        Director director = directorService.getDirectorById(movieRequest.getDirectorId())
-                .orElseThrow(() -> new ResourceNotFoundException("Director not found"));
+        Director director = directorService.getDirectorByName(movieRequest.getDirector())
+        .orElseGet(() -> {
+            Director newDirector = new Director();
+            newDirector.setName(movieRequest.getDirector());
+            newDirector.setMovies(new ArrayList<>());
+            return directorService.createDirector(newDirector);
+        });
         movie.setDirector(director);
         
         // Guardar la película
@@ -74,6 +85,7 @@ public class MovieService {
         return movieRepository.findByTitle(title);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public Movie modifyMovie(Long id, MovieRequest movieDetails) {
         Optional<Movie> optionalMovie = movieRepository.findById(id);
         if (optionalMovie.isPresent()) {
@@ -84,24 +96,44 @@ public class MovieService {
             movie.setPrice(movieDetails.getPrice());
             movie.setDiscountPercentage(movieDetails.getDiscountPercentage());
             movie.setStock(movieDetails.getStock());
-            movie.setImageUrl(movieDetails.getImageUrl());
+            movie.setPoster(movieDetails.getPoster());
+            movie.setDescription(movieDetails.getDescription());
 
             // Buscar y asignar el género
-            Genre genre = genreService.getGenreById(movieDetails.getGenreId())
-            .orElseThrow(() -> new ResourceNotFoundException("Genre not found"));
+            Genre genre = genreService.getGenreByName(movieDetails.getGenre())
+                    .orElseGet(() -> {
+                        Genre newGenre = new Genre();
+                        newGenre.setName(movieDetails.getGenre());
+                        return genreService.createGenre(newGenre);
+                    });
             movie.setGenre(genre);
 
             // Buscar y asignar el director
-            Director director = directorService.getDirectorById(movieDetails.getDirectorId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Director not found"));
+            Director director = directorService.getDirectorByName(movieDetails.getDirector())
+                    .orElseGet(() -> {
+                        Director newDirector = new Director();
+                        newDirector.setName(movieDetails.getDirector());
+                        return directorService.createDirector(newDirector);
+                    });
             movie.setDirector(director);
 
             return movieRepository.save(movie);
-        } else { // Orden no encontrada
+        } else { // Película no encontrada
             return null;
         }
     }
 
+    @Transactional(rollbackFor = Throwable.class)
+    public boolean deleteMovieByTitle(String title) {
+        Optional<Movie> movie = movieRepository.findByTitle(title);
+        if (movie.isPresent()) {
+            movieRepository.delete(movie.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public boolean deleteMovieById(Long id) {
         if (movieRepository.existsById(id)) {
             movieRepository.deleteById(id);
@@ -116,6 +148,7 @@ public class MovieService {
         return true;
     }
     
+    // Método para obtener las películas disponibles => stock > 0
     public Page<Movie> getAvailableMovies(PageRequest pageable) {
         return movieRepository.findByStockGreaterThan(0, pageable);
     }

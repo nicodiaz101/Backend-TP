@@ -45,7 +45,8 @@ public class DirectorController {
                         .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Director> getDirectorByName(@PathVariable String name) {
+    @GetMapping("/name")
+    public ResponseEntity<Director> getDirectorByName(@RequestParam String name) {
         Optional<Director> director = directorService.getDirectorByName(name);
         return director.map(ResponseEntity::ok)
                         .orElseGet(() -> ResponseEntity.notFound().build());
@@ -74,10 +75,10 @@ public class DirectorController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteDirectorById(@PathVariable Long id) {
+    @DeleteMapping("/name")
+    public ResponseEntity<HttpStatus> deleteDirectorByName(@RequestParam String name) {
         try {
-            boolean isDeleted = directorService.deleteDirectorById(id);
+            boolean isDeleted = directorService.deleteDirectorByName(name);
             if (isDeleted) {
                 return ResponseEntity.noContent().build();
             } else {

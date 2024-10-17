@@ -32,13 +32,16 @@ public class SecurityConfig {
                                                 .requestMatchers("/error/**").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .requestMatchers("/users/**").hasAuthority("ADMIN")
-                                                .requestMatchers("/movies/**").hasAuthority("ADMIN")
+                                                .requestMatchers(HttpMethod.POST, "/movies").hasAnyAuthority("ADMIN")
+                                                .requestMatchers(HttpMethod.DELETE, "/movies/**").hasAuthority("ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/movies/**").hasAuthority("ADMIN")
+                                                .requestMatchers(HttpMethod.GET, "/movies/**").hasAnyAuthority("USER", "ADMIN")
                                                 .requestMatchers("/genres/**").hasAuthority("ADMIN")
+                                                .requestMatchers("/directors/**").hasAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.POST, "/orders").hasAnyAuthority("USER", "ADMIN") // Permitir crear órdenes para todos
                                                 .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAuthority("ADMIN") // Restringir DELETE a ADMIN
                                                 .requestMatchers(HttpMethod.PUT, "/orders/**").hasAuthority("ADMIN") // Restringir PUT a ADMIN
                                                 .requestMatchers(HttpMethod.GET, "/orders/**").hasAnyAuthority("USER", "ADMIN") // Permitir ver órdenes para todos
-                                                .requestMatchers("/directors/**").hasAuthority("ADMIN")
                                                 .anyRequest()
                                                 .authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

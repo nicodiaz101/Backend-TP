@@ -33,6 +33,7 @@ public class DirectorService {
         return directorRepository.findById(id);
     }
     
+    @Transactional(rollbackFor = Throwable.class)
     public Director modifyDirector(Long id, Director directorDetails) {
         Optional<Director> optionalDirector = directorRepository.findById(id);
         if (optionalDirector.isPresent()) {
@@ -45,12 +46,19 @@ public class DirectorService {
         }
     }
     
-    public boolean deleteDirectorById(Long id) {
-        if (directorRepository.existsById(id)) {
-            directorRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
+    @Transactional(rollbackFor = Throwable.class)
+    public boolean deleteDirectorByName(String name) {
+        try {
+            Optional<Director> optionalDirector = directorRepository.findByName(name);
+            if (optionalDirector.isPresent()) {
+                Director director = optionalDirector.get();
+                directorRepository.delete(director);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting director by name: " + e.getMessage(), e);
         }
     }
 

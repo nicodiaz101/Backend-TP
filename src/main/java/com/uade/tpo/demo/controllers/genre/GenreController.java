@@ -44,7 +44,8 @@ public class GenreController {
                         .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Genre> getGenreByName(@PathVariable String name) {
+    @GetMapping("/name")
+    public ResponseEntity<Genre> getGenreByName(@RequestParam String name) {
         Optional<Genre> genre = genreService.getGenreByName(name);
         return genre.map(ResponseEntity::ok)
                         .orElseGet(() -> ResponseEntity.notFound().build());
@@ -73,10 +74,10 @@ public class GenreController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteGenreById(@PathVariable Long id) {
+    @DeleteMapping("/name")
+    public ResponseEntity<HttpStatus> deleteGenreByName(@RequestParam String name) {
         try{
-            boolean isDeleted = genreService.deleteGenreById(id);
+            boolean isDeleted = genreService.deleteGenreByName(name);
             if (isDeleted) {
                 return ResponseEntity.noContent().build();
             } else {
@@ -88,7 +89,7 @@ public class GenreController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deleteAllGenres() {
+    public ResponseEntity<HttpStatus> deleteAllGenres() {
         try {
             genreService.deleteAllGenres();
             return ResponseEntity.noContent().build();

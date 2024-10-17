@@ -12,7 +12,8 @@ public class MovieRequest {
     private double price;
     private double discountPercentage;
     private int stock;
-    private String imageUrl;
-    private Long genreId;
-    private Long directorId;
+    private String poster;
+    private String description;
+    private String genre;
+    private String director;
 }

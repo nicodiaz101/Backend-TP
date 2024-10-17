@@ -9,5 +9,8 @@ import com.uade.tpo.demo.entity.Genre;
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     // Método para buscar un género por su nombre
     Optional<Genre> findByName(String name);
-
+    // Método para verificar si existe un género por su nombre
+    boolean existsByName(String name);
+    // Método para eliminar un género por su nombre
+    void deleteByName(String name);
 }

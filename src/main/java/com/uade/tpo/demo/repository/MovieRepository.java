@@ -15,4 +15,5 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Optional<Movie> findByTitle(String titleString);
     Optional<Movie> findByMovieId(Long movieId);
     Page<Movie> findByStockGreaterThan(Integer stock, PageRequest pageable);
+    void deleteByTitle(String title);
 }

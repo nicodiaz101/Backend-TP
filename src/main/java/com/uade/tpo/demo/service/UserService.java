@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
@@ -15,6 +16,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(rollbackFor = Throwable.class)
     public User createUser(User user) {
         return userRepository.save(user);
     }
@@ -31,6 +33,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public User updateUser(Long id, User userDetails) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()){

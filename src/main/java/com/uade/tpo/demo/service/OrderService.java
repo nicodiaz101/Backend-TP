@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.tpo.demo.controllers.movies.MovieRequest;
 import com.uade.tpo.demo.entity.Movie;
 import com.uade.tpo.demo.entity.Order;
 import com.uade.tpo.demo.entity.User;
@@ -47,8 +48,26 @@ public class OrderService {
             if (!optionalMovie.isPresent() || optionalMovie.get().getStock() == 0) { // Película no encontrada o sin stock
                 throw new RuntimeException("Movie not found: " + movieTitle);
             }
-            finalAmount = finalAmount + movieService.calculateFinalPrice(optionalMovie.get());
-            movies.add(optionalMovie.get());
+            Movie movie = optionalMovie.get();
+            finalAmount = finalAmount + movieService.calculateFinalPrice(movie);
+            movie.setStock(movie.getStock() - 1); // Disminuir el stock
+            
+            // Crear un objeto MovieRequest con los detalles de la película
+            MovieRequest movieRequest = new MovieRequest();
+            movieRequest.setTitle(movie.getTitle());
+            movieRequest.setReleaseDate(movie.getReleaseDate());
+            movieRequest.setImdbScore(movie.getImdbScore());
+            movieRequest.setPrice(movie.getPrice());
+            movieRequest.setDiscountPercentage(movie.getDiscountPercentage());
+            movieRequest.setStock(movie.getStock());
+            movieRequest.setPoster(movie.getPoster());
+            movieRequest.setDescription(movie.getDescription());
+            movieRequest.setGenre(movie.getGenre().getName());
+            movieRequest.setDirector(movie.getDirector().getName());
+
+            // Modificar la película utilizando el objeto MovieRequest
+            movieService.modifyMovie(movie.getMovieId(), movieRequest);
+            movies.add(movie); // Agregar la película a la lista
         }
         
         // Crear y guardar la orden
@@ -92,6 +111,7 @@ public class OrderService {
         return formatter.parse(dateString);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public Order updateOrder(Long id, Order orderDetails) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {

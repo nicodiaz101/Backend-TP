@@ -33,6 +33,7 @@ public class GenreService {
         return genreRepository.findById(id);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public Genre modifyGenre(Long id, Genre genreDetails) {
         Optional<Genre> optionalGenre = genreRepository.findById(id);
         if (optionalGenre.isPresent()) {
@@ -45,12 +46,19 @@ public class GenreService {
         }
     }
 
-    public boolean deleteGenreById(Long id) {
-        if (genreRepository.existsById(id)) {
-            genreRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
+    @Transactional(rollbackFor = Throwable.class)
+    public boolean deleteGenreByName(String name) {
+        try {
+            Optional<Genre> optionalGenre = genreRepository.findByName(name);
+            if (optionalGenre.isPresent()) {
+                Genre genre = optionalGenre.get();
+                genreRepository.delete(genre);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting genre by name: " + e.getMessage(), e);
         }
     }
 
