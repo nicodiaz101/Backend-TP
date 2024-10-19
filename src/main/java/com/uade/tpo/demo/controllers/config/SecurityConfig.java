@@ -35,7 +35,7 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.POST, "/movies").hasAnyAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.DELETE, "/movies/**").hasAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.PUT, "/movies/**").hasAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.GET, "/movies/**").hasAnyAuthority("USER", "ADMIN")
+                                                .requestMatchers(HttpMethod.GET, "/movies/**").permitAll()
                                                 .requestMatchers("/genres/**").hasAuthority("ADMIN")
                                                 .requestMatchers("/directors/**").hasAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.POST, "/orders").hasAnyAuthority("USER", "ADMIN") // Permitir crear órdenes para todos
