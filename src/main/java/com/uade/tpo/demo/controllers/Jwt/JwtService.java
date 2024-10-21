@@ -11,6 +11,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.demo.entity.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,7 +24,7 @@ public class JwtService {
 
     private static final String SECRET_KEY="586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
 
-    public String generateToken(UserDetails user) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", user.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
@@ -31,7 +33,7 @@ public class JwtService {
     }
 
     @SuppressWarnings("deprecation")
-    private String createToken(Map<String,Object> extraClaims, UserDetails user) {
+    private String createToken(Map<String,Object> extraClaims, User user) {
         return Jwts
             .builder()
             .setClaims(extraClaims)
