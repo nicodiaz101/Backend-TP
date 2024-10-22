@@ -28,6 +28,7 @@ public class AuthService {
         return AuthResponse.builder()
             .token(token)
             .role(user.getRole())
+            .userId(user.getUserId())
             .build();
 
     }
