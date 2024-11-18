@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.tpo.demo.controllers.auth.RegisterRequest;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
 
@@ -34,18 +35,17 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public User updateUser(Long id, User userDetails) {
+    public User updateUser(Long id, RegisterRequest userDetails) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setCountry(userDetails.getCountry());
             user.setEmail(userDetails.getEmail());
-            user.setFirstName(userDetails.getFirstName());
-            user.setLastName(userDetails.getLastName());
+            user.setFirstName(userDetails.getFirstname());
+            user.setLastName(userDetails.getLastname());
             user.setPassword(userDetails.getPassword());
             user.setUsername(userDetails.getUsername());
             user.setRole(userDetails.getRole());
-            user.setOrders(userDetails.getOrders());
 
             return userRepository.save(user);
         } else { // User no encontrado

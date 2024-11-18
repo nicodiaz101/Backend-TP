@@ -76,10 +76,6 @@ public class OrderService {
         order.setOrderDate(new Date()); // Fecha actual
         order.setUser(user);
         order.setMovies(movies);
-        
-        // Actualizar las ordenes del usuario
-        user.getOrders().add(order);
-        userService.updateUser(user.getUserId(), user);
 
         return orderRepository.save(order);
     }

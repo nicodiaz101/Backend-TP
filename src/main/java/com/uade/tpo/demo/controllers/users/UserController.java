@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.demo.controllers.auth.RegisterRequest;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.service.UserService;
 
@@ -47,14 +49,14 @@ public class UserController {
     }
 
     // Actualizar un usuario
-    @PostMapping("/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable("id") Long id, @RequestBody User userDetails) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDetails) {
         try{
             User updatedUser = userService.updateUser(id, userDetails);
             if (updatedUser != null){
-            return ResponseEntity.ok().location(URI.create("/users/" + updatedUser.getUserId())).body(updatedUser);
+                return ResponseEntity.ok().location(URI.create("/users/" + updatedUser.getUserId())).body(updatedUser);
             } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
         catch (RuntimeException e) {
@@ -63,7 +65,7 @@ public class UserController {
     }    
 
 
-    // Eliminar un usuario
+    // Eliminar un usuario por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         if (userService.deleteUser(id)) {
